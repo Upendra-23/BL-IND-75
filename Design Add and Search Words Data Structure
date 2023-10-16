@@ -1,0 +1,60 @@
+struct Node {
+    Node* links[26];
+    bool flag = false;
+    bool contains(char ch){
+        return links[ch-'a'];
+    }
+    void put(char ch, Node* node){
+        links[ch-'a'] = node; 
+    }
+    Node* get(char ch){
+        return links[ch-'a'];
+    }
+};
+class WordDictionary {
+    Node* root;
+public:
+    WordDictionary() {
+        root = new Node();
+    }
+    
+    void addWord(string word) {
+         Node* node = root;
+        for(int i=0;i<word.size();i++){
+            if(!node->contains(word[i]))
+                node->put(word[i],new Node());
+            node = node->get(word[i]);
+        }
+        node->flag = true;
+    }
+
+    bool fun(int i,string &word,Node* node){
+        if(i == word.size())
+            return node->flag;
+        if(word[i] != '.'){
+            if(!node->contains(word[i]))
+                return false;
+            return fun(i+1,word,node->get(word[i]));
+        }
+        else{
+            for(char ch='a';ch<='z';ch++){
+                if(node->contains(ch)){
+                    if(fun(i+1,word,node->get(ch)))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    bool search(string word) {
+        return fun(0,word,root);
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
