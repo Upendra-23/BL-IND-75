@@ -1,0 +1,78 @@
+struct Node {
+    Node* links[26];
+    int end = 0;
+    string str;
+    bool contains(char ch){
+        return links[ch-'a'];
+    }
+    void put(char ch){
+        Node* node = new Node();
+        links[ch-'a'] = node;
+    }
+    Node* get(char ch){
+        return links[ch-'a'];
+    }
+};
+class Trie {
+public:
+    Node* root;
+    Trie() {
+        root = new Node();
+    }
+    void insert(string &word){
+        Node* node = root;
+        for(int i=0;i<word.size();i++){
+            if(!node->contains(word[i]))
+                node->put(word[i]);
+            node = node->get(word[i]);
+        }
+        node->end++;
+        node->str = word;
+    }  
+};
+class Solution {
+    bool isvalid(int row,int col,int n,int m){
+        return row >= 0 && row < n && col >=0 && col < m;
+    }
+    void helper(int row,int col,vector<vector<char>> &board,vector<string> &ans,Node* node){
+        if(node->end > 0){
+            ans.push_back(node->str);
+            node->end--;
+        }
+        int dr[] = {-1,0,0,1};
+        int dc[] = {0,-1,1,0};
+        for(int i=0;i<4;i++){
+            int nrow = row + dr[i];
+            int ncol = col + dc[i];
+            if(isvalid(nrow,ncol,board.size(),board[0].size()) && board[nrow][ncol] != '$'
+            && node->contains(board[nrow][ncol])){
+                char ch = board[nrow][ncol];
+                board[nrow][ncol] = '$';
+                helper(nrow,ncol,board,ans,node->get(ch));
+                board[nrow][ncol] = ch;
+            }
+        }
+    }
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        Trie obj;
+        for(auto it:words)
+            obj.insert(it);
+        
+        Node* root = obj.root;
+        int n = board.size();
+        int m = board[0].size();
+        vector<string> ans;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(root->contains(board[i][j])){
+                    char ch = board[i][j];
+                    board[i][j] = '$';
+                    helper(i,j,board,ans,root->get(ch));
+                    board[i][j] = ch;
+                }
+            }
+        }
+        return ans;
+    }
+};
