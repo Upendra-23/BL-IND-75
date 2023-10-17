@@ -1,0 +1,45 @@
+class Solution {
+
+    bool isvalid(int row,int col,int n,int m){
+        return row >= 0 && row < n && col >= 0 && col < m;
+    }
+
+    void bfs(int row,int col,vector<vector<char>> &grid){
+        queue<pair<int,int>> q;
+        q.push({row,col});
+        grid[row][col] = '$';
+
+        int dr[] = {-1,0,0,1};
+        int dc[] = {0,-1,1,0};
+
+        while(!q.empty()){
+            row = q.front().first;
+            col = q.front().second;
+            q.pop();
+
+            for(int i=0;i<4;i++){
+                int nrow = row + dr[i];
+                int ncol = col + dc[i];
+                if(isvalid(nrow,ncol,grid.size(),grid[0].size()) && grid[nrow][ncol] == '1'){
+                    grid[nrow][ncol] = '$';
+                    q.push({nrow,ncol});
+                }
+            }
+        }
+    }
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        int cntIslands = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j] == '1'){
+                    cntIslands++;
+                    bfs(i,j,grid);
+                }
+            }
+        }
+        return cntIslands;
+    }
+};
