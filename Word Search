@@ -1,0 +1,38 @@
+class Solution {
+    bool isvalid(int row,int col,int n,int m){
+        return row >= 0 && row < n && col >= 0 && col < m;
+    }
+    bool fun(int row,int col,int ind,string &word,vector<vector<char>> &board){
+        if(ind == word.size())
+            return true;
+        int dr[] = {-1,0,0,1};
+        int dc[] = {0,-1,1,0};
+        for(int i=0;i<4;i++){
+            int nrow = row + dr[i];
+            int ncol = col + dc[i];
+            if(isvalid(nrow,ncol,board.size(),board[0].size()) && board[nrow][ncol] != '$' && word[ind] == board[nrow][ncol]){
+                board[nrow][ncol] = '$';
+                if(fun(nrow,ncol,ind+1,word,board))
+                    return true;
+                board[nrow][ncol] = word[ind];
+            }
+        }
+        return false;
+    }
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int n = board.size();
+        int m = board[0].size();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(board[i][j] == word[0]){
+                    board[i][j] = '$';
+                    if(fun(i,j,1,word,board))
+                        return true;
+                    board[i][j] = word[0];
+                }
+            }
+        }
+        return false;
+    }
+};
