@@ -1,0 +1,43 @@
+class Solution
+{
+    public:
+    //Function to insert heap.
+    priority_queue<int> maxHeap;
+    priority_queue<int,vector<int>,greater<int>> minHeap;
+    void insertHeap(int &num)
+    {
+        if(maxHeap.size() == 0) maxHeap.push(num);
+        else if(maxHeap.top() < num) minHeap.push(num);
+        else maxHeap.push(num);
+        balanceHeaps();
+    }
+    
+    //Function to balance heaps.
+    void balanceHeaps()
+    {
+        int n = maxHeap.size();
+        int m = minHeap.size();
+        if(abs(n-m) == 2){
+            if(n > m){
+                int el = maxHeap.top();
+                maxHeap.pop();
+                minHeap.push(el);
+            }
+            else{
+                int el = minHeap.top();
+                minHeap.pop();
+                maxHeap.push(el);
+            }
+        }
+    }
+    
+    //Function to return Median.
+    double getMedian()
+    {
+        int n = maxHeap.size();
+        int m = minHeap.size();
+
+        if((n+m) & 1) return n > m ? maxHeap.top() : minHeap.top();
+        return (maxHeap.top() + minHeap.top())/2.0;
+    }
+};
