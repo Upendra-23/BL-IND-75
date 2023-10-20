@@ -1,0 +1,21 @@
+class Solution {
+    int fun(int ind,string &s,vector<int> &dp){
+        if(ind == s.size()) return 1;
+        if(dp[ind] != -1) return dp[ind];
+        int cnt = 0;
+        for(int i=ind;i<s.size();i++){
+            string str = s.substr(ind,i-ind+1);
+            if(str[0] == '0' || str.size() > 2) break;
+            int val = stoi(str);
+            if(val <= 26)
+                cnt += fun(i+1,s,dp);
+        }
+        return dp[ind] = cnt;
+    }
+public:
+    int numDecodings(string s) {
+        int n = s.size();
+        vector<int> dp(n,-1);
+        return fun(0,s,dp);
+    }
+};
