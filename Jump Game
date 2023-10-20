@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 1) return true;
+        vector<int> vis(n,0);
+        queue<int> q;
+        q.push(0);
+        vis[0] = 1;
+        while(!q.empty()){
+            int ind = q.front();
+            q.pop();
+            int val = nums[ind];
+            while(val--){
+                ind++;
+                if(ind < n && !vis[ind]){
+                    vis[ind] = 1;
+                    if(ind == n-1) return true;
+                    q.push(ind);
+                }
+            }
+        }
+        return false;
+    }
+};
