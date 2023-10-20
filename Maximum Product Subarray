@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int ans = -1e9, pfpro = 1, sfpro = 1;
+        int n = nums.size();
+        for(int i=0;i<n;i++){
+            pfpro *= nums[i];
+            sfpro *= nums[n-i-1];
+            ans = max(ans,max(pfpro,sfpro));
+            if(pfpro == 0) pfpro = 1;
+            if(sfpro == 0) sfpro = 1;
+        }
+        return ans;
+    }
+};
