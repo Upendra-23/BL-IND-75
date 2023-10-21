@@ -1,0 +1,26 @@
+#include <bits/stdc++.h> 
+int minRooms(vector<vector<int>> intervals)
+{
+    vector<int> st,et;
+    for(auto it:intervals){
+        st.push_back(it[0]);
+        et.push_back(it[1]);
+    }
+    sort(st.begin(),st.end());
+    sort(et.begin(),et.end());
+    int maxCnt = 1, cnt = 1;
+    int i = 1, j = 0;
+    while(i < st.size() && j < et.size()){
+        if(st[i] < et[j]){
+            cnt++;
+            maxCnt = max(maxCnt,cnt);
+            i++;
+        }
+        else{
+            cnt--;
+            j++;
+        }
+    }
+    return maxCnt;
+}
+https://www.codingninjas.com/studio/problems/meeting-room-ii_893289?leftPanelTab=0
